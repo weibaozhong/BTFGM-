@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from pytorch_wavelets import DWT1DForward, DWT1DInverse
 from layers.RevIN import RevIN
-from mamba_plus import Mamba  # 确保已安装 mamba-ssm
+from mamba_plus import Mamba 
 from layers.BMambaXer_Enc import EncoderLayer, Encoder
 from layers.Embed import DataEmbedding_inverted
 from layers.SelfAttention_Family import FullAttention, AttentionLayer
@@ -197,7 +197,7 @@ class Model(nn.Module):
         
 
     def forward(self, x, x_mark_enc, x_dec, x_mark_dec, mask=None):
-# -------------------小波变换mamba-------------------------
+
         x_enc = x
         if self.use_norm:
             # Normalization from Non-stationary Transformer
@@ -226,7 +226,7 @@ class Model(nn.Module):
         y_reshaped = y.reshape(B * C, D, T_)
 
         # Mamba
-        # y_mamba = self.mamba_block(y_reshaped) + y_reshaped  # 残差连接
+        # y_mamba = self.mamba_block(y_reshaped) + y_reshaped 
         y_mamba = self.mamba_block(y_reshaped) 
         y = y_mamba.reshape(B, C, D, T_)
 
@@ -256,10 +256,7 @@ class Model(nn.Module):
         else:
             y = y.permute(0, 2, 1)
             y = self.revin_layer(y, 'denorm')
-# --------------------------------------------
-        # y torch.Size([8, 96, 7])
-        # print("y",y.shape)
-        # print(x_enc.shape)
+
         en_embed = self.en_embedding(x_enc, None)
         
 
@@ -267,30 +264,11 @@ class Model(nn.Module):
         enc_out = enc_out + en_embed
 
         y_cross = y.permute(0, 2, 1)
-        # print("y_cross",y_cross.shape)
-        # print("enc_out",enc_out.shape)
-        # print(y_cross.shape)
+
         y_cross = self.c_linear(y_cross)
         ycross, attn1 = self.crossattention1(y_cross, enc_out, enc_out, attn_mask=None)
         y_cross = self.dropout(ycross)
         y_cross = y_cross + ycross
-
-
-        # # 提取选定批次和头的注意力权重
-        # attn_weights = attn1[0, 0, :, :]
-
-        # # 绘制热力图
-        # plt.figure(figsize=(10, 6))
-        # plt.imshow(attn_weights.detach().cpu().numpy(), cmap='viridis', aspect='auto')
-        # plt.colorbar(label="Attention Weight")
-        # plt.xlabel("Key")
-        # plt.ylabel("Query")
-        # plt.title("FQ-Cross-Attention Heatmap")
-
-        # # 保存为图片
-        # plt.savefig('cross_attention_heatmap.png', dpi=500)  # 指定文件名和分辨率
-        # plt.close()  # 关闭图形以释放内存
-
 
 
         encross, attn2 = self.crossattention1(enc_out, y_cross, y_cross, attn_mask=None)
