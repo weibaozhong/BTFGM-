@@ -5,9 +5,9 @@ model_name=BTFGM
 python3 -u run.py \
   --task_name long_term_forecast \
   --is_training 1 \
-  --root_path ./dataset/ETT-small/ \
+  --root_path ./dataset/yss/ \
   --data_path yss.csv \
-  --model_id ETTh1_96_96 \
+  --model_id yss_96_4 \
   --model $model_name \
   --data custom\
   --features M \
@@ -28,9 +28,9 @@ python3 -u run.py \
 python3 -u run.py \
   --task_name long_term_forecast \
   --is_training 1 \
-  --root_path ./dataset/ETT-small/ \
+  --root_path ./dataset/yss/ \
   --data_path yss.csv \
-  --model_id ETTh1_96_192 \
+  --model_id yss_96_8 \
   --model $model_name \
   --data custom\
   --features M \
@@ -50,9 +50,9 @@ python3 -u run.py \
 python3 -u run.py \
   --task_name long_term_forecast \
   --is_training 1 \
-  --root_path ./dataset/ETT-small/ \
+  --root_path ./dataset/yss/ \
   --data_path yss.csv \
-  --model_id ETTh1_96_336 \
+  --model_id yss_96_14 \
   --model $model_name \
   --data custom\
   --features M \
@@ -73,9 +73,9 @@ python3 -u run.py \
 python3 -u run.py \
   --task_name long_term_forecast \
   --is_training 1 \
-  --root_path ./dataset/ETT-small/ \
+  --root_path ./dataset/yss/ \
   --data_path yss.csv \
-  --model_id ETTh1_96_720 \
+  --model_id yss_96_30 \
   --model $model_name \
   --data custom\
   --features M \
